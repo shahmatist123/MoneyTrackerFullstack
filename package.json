@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "start:client": "cross-env NODE_ENV=production nodemon index.js",
     "server": "nodemon index.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"cross-env NODE_ENV=development \" \"npm run client\" \"npm run start\""
+    "dev": "concurrently \"cross-env NODE_ENV=development \" \"npm run client\" \"npm run start\"",
+    "prod": "concurrently \"npm run client\" \"npm run start\""
   },
   "keywords": [
     "node",
@@ -23,12 +23,15 @@
     "config": "^3.3.7",
     "cors": "^2.8.5",
     "express": "^4.17.2",
+    "formidable": "^2.0.1",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "nodemailer": "^6.7.2",
     "nodemon": "^1.19.4",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
+    "pg": "^8.7.3",
     "validator": "^13.7.0"
   },
   "engines": {
