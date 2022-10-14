@@ -1,9 +1,9 @@
 export interface MoneyI {
     "id": number,
-    "Name": string,
-    "Category": string,
-    "Summ": number,
-    "Date": string,
-    "Market": string,
-    "UserId": number
+    "name": string,
+    "category": string,
+    "summ": number,
+    "date": string,
+    "market": string,
+    "userId": number
 }

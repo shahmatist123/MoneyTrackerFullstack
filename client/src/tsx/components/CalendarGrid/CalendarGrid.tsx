@@ -81,14 +81,14 @@ const CalendarGrid = (props: CalendarI) => {
     const getSumMoney = (money: MoneyI[]): number => {
         let sum = 0;
         money.forEach(item => {
-            sum += item.Summ
+            sum += item.summ
         })
         return sum
     }
 
     const getContent = (): JSX.Element => {
         const day = date.getDate()
-        const tempMoney = money ? money.filter(item => item.Date.split('.')[0] === day + "") : null
+        const tempMoney = money ? money.filter(item => item.date.split('.')[0] === day + "") : null
         date.setDate(day + 1)
         return (
             <>
@@ -103,7 +103,7 @@ const CalendarGrid = (props: CalendarI) => {
 
     const getCell = (i: number): JSX.Element => {
         return (
-            <Cell key={i} style={{height: cellHeight}} onClick={() => props.onClickCell(money.find(item => item.Date.split(".")[0] === i+""))}>
+            <Cell key={i} style={{height: cellHeight}} onClick={() => props.onClickCell(money.find(item => item.date.split(".")[0] === i+""))}>
                 {getContent()}
             </Cell>
         )

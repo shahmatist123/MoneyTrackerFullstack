@@ -13,7 +13,7 @@ const CalendarObserver = () => {
     let moneyStore
     useEffect(() => {
         getPerMonth().then((result) => {
-            setMoney(result.data.values.result)
+            setMoney(result.data.values.purchaseList)
         })
         return
     }, [])

@@ -26,12 +26,12 @@ const Bg = styled.span`
 
 const Calendar = () => {
     const [activeMoney, setActiveMoney] = useState<MoneyI>({
-        Category: "",
-        Date: "",
-        Market: "",
-        Name: "",
-        Summ: 0,
-        UserId: 0,
+        category: "",
+        date: "",
+        market: "",
+        name: "",
+        summ: 0,
+        userId: 0,
         id: 0
     })
     const onClickCell = (money: MoneyI | undefined) => {
@@ -41,7 +41,7 @@ const Calendar = () => {
     return (
         <>
             {activeMoney.id !== 0 && (<>
-                <Modal>{activeMoney.Summ}</Modal>
+                <Modal>{activeMoney.summ}</Modal>
                 <Bg onClick={() => setActiveMoney({...activeMoney, id: 0})}></Bg>
             </>)}
             <CalendarGrid onClickCell={onClickCell}/>
