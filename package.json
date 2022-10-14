@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "server": "nodemon index.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"cross-env NODE_ENV=development \" \"npm run client\" \"npm run start\"",
-    "prod": "concurrently \"npm run client\" \"npm run start\""
+    "devClient": "npm run build --prefix client",
+    "dev": "concurrently \"npm run client\" \"npm run start\"",
+    "prod": "concurrently \"npm run devClient\" \"npm run start\""
   },
   "keywords": [
     "node",
