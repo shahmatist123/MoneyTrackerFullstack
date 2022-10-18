@@ -127,3 +127,19 @@ exports.getMoneyPerMouth = (req, res) => {
         })
     })
 }
+exports.getTicketItems = (req, res) => {
+    const data = req.query
+    const ticketId = data.ticketId
+    db.connect((err, client, done) => {
+        client.query(`SELECT *
+                      FROM moneydb.ticketitems
+                      where "ticketId" in (${ticketId});`, (error, result) => {
+            if (error) {
+                console.log(error)
+                response.status(400, error, res)
+            } else{
+                response.status(200, result.rows, res)
+            }
+        })
+    })
+}
