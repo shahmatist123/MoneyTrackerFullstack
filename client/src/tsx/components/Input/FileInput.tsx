@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, MouseEvent, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components'
 import {P} from "../../types/inputI";
 import axios from "axios";
@@ -11,12 +11,16 @@ const Span = styled.span`
   display: inline-block;
   margin-top: 10px;
 `
-
 const FileInput = (props: P) => {
-    const fileLoad = (event: ChangeEvent<HTMLInputElement>) => {
+    const fileInput = useRef(null);
+    const fileLoad = (event: MouseEvent<HTMLInputElement>) => {
         event.preventDefault()
+        if (!fileInput.current) return null
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const files = fileInput.current.files
         const data = new FormData()
-        const file = event.target.files || []
+        const file = files || []
         if (file[0]) {
             data.append("JSON_file", file[0])
         }
@@ -26,9 +30,11 @@ const FileInput = (props: P) => {
     return(
         <>
             <label>
-                <Input type="file" name={props.name} multiple={false} accept={"application/json"} onChange={fileLoad}/>
+                <Input ref={fileInput} type="file" id="fileInput" name={props.name} multiple={false} accept={"application/json"}/>
                 <Span>{props.placeholder}</Span>
             </label>
+            <input type="submit" placeholder={'отправить'} onClick={fileLoad}/>
+
         </>
     )
 }
