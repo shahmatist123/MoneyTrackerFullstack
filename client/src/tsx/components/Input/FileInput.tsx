@@ -1,6 +1,8 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import styled from 'styled-components'
 import {P} from "../../types/inputI";
+import axios from "axios";
+import {addFile} from "../../api/MoneyApi/MoneyApi";
 
 const Input = styled.input`
   margin-top: 40px;
@@ -18,7 +20,7 @@ const FileInput = (props: P) => {
         if (file[0]) {
             data.append("JSON_file", file[0])
         }
-        console.log(data, file)
+        addFile(data)
     }
 
     return(

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import CalendarGrid from "../../components/CalendarGrid/CalendarGrid";
-import {MoneyI} from "../../types/moneyI";
+import {moneyPurchase} from "../../types/moneyI";
 import styled from "styled-components";
 
 const Modal = styled.span`
@@ -25,7 +25,7 @@ const Bg = styled.span`
 `
 
 const Calendar = () => {
-    const [activeMoney, setActiveMoney] = useState<MoneyI>({
+    const [activeMoney, setActiveMoney] = useState<moneyPurchase>({
         category: "",
         date: "",
         market: "",
@@ -34,7 +34,7 @@ const Calendar = () => {
         userId: 0,
         id: 0
     })
-    const onClickCell = (money: MoneyI | undefined) => {
+    const onClickCell = (money: moneyPurchase | undefined) => {
         money && setActiveMoney(money)
     }
 

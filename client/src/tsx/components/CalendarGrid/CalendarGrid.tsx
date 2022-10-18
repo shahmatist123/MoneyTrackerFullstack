@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import styled from 'styled-components'
 import {getPerMonth} from "../../api/MoneyApi/MoneyApi";
-import {MoneyI} from "../../types/moneyI";
+import {moneyItem, moneyPurchase} from "../../types/moneyI";
 import {getApiValues} from "../../utils";
 import {useMoneyStore} from "../../helpers/useStore";
 import {Observer} from 'mobx-react';
@@ -58,7 +58,7 @@ const getLastDay = (): number => {
 }
 
 interface CalendarI {
-    onClickCell: (money: MoneyI|undefined) => void
+    onClickCell: (money: moneyPurchase|undefined) => void
 }
 
 const CalendarGrid = (props: CalendarI) => {
@@ -66,7 +66,7 @@ const CalendarGrid = (props: CalendarI) => {
     const [month, setMounth] = useState(date.getMonth());
     const [cellHeight, setCellHeight] = useState(0)
     date.setDate(1)
-    const money = useMoneyStore().getMoney.map(item => toJS(item))
+    const money = useMoneyStore().getMoney
     const lastDay = getLastDay()
     const resizeWindow = () => {
         setCellHeight(window.outerWidth / 12);
@@ -78,33 +78,35 @@ const CalendarGrid = (props: CalendarI) => {
         return () => window.removeEventListener("resize", resizeWindow);
     }, [])
 
-    const getSumMoney = (money: MoneyI[]): number => {
+    const getSumMoney = (money: moneyItem): string => {
         let sum = 0;
-        money.forEach(item => {
-            sum += item.summ
+        money?.tickets.forEach(ticket => {
+            sum += ticket.summ
         })
-        return sum
+        money?.purchases.forEach(purchase => {
+            sum += purchase.summ * 100
+        })
+        const strSum = (sum + "").split("")
+        return sum ? strSum.splice(0,  strSum.length - 2).join("") : "0"
     }
 
-    const getContent = (): JSX.Element => {
+    const getContent = (i: number): JSX.Element => {
         const day = date.getDate()
-        const tempMoney = money ? money.filter(item => item.date.split('.')[0] === day + "") : null
+        const currentMoney = money[i]
         date.setDate(day + 1)
         return (
             <>
                 <Day>{day}</Day>
-                {tempMoney && (
-                    <Summ>{getSumMoney(tempMoney)} ₽</Summ>
-                )}
-
+                <Summ>{getSumMoney(currentMoney)} ₽</Summ>
             </>
         )
     }
 
     const getCell = (i: number): JSX.Element => {
+        const currentMoney = money[i]
         return (
-            <Cell key={i} style={{height: cellHeight}} onClick={() => props.onClickCell(money.find(item => item.date.split(".")[0] === i+""))}>
-                {getContent()}
+            <Cell key={i} style={{height: cellHeight}}>
+                {getContent(i)}
             </Cell>
         )
     }
