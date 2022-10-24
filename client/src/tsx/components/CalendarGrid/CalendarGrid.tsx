@@ -12,7 +12,6 @@ const Grid = styled.div`
   grid-gap: 1px;
   position: relative;
 `
-
 const Day = styled.span`
   color: #fff;
   font-weight: 700;
@@ -123,7 +122,7 @@ const CalendarGrid = (props: CalendarI) => {
             </Grid>
 
             {modalData && Object.values(modalData).length && (
-               <CalendarModal setModalData={(data:moneyItem) => setModalData(data)} modalData={modalData}/>
+                <CalendarModal setModalData={(data: moneyItem) => setModalData(data)} modalData={modalData}/>
             )}
         </>
     )

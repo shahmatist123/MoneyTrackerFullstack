@@ -27,10 +27,11 @@ const FileInput = (props: P) => {
         addFile(data)
     }
 
-    return(
+    return (
         <>
             <label>
-                <Input ref={fileInput} type="file" id="fileInput" name={props.name} multiple={false} accept={"application/json"}/>
+                <Input ref={fileInput} type="file" id="fileInput" name={props.name} multiple={false}
+                       accept={"application/json"}/>
                 <Span>{props.placeholder}</Span>
             </label>
             <input type="submit" placeholder={'отправить'} onClick={fileLoad}/>
