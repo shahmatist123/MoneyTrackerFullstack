@@ -14,8 +14,8 @@ const MainRouter = () => {
     return (
         <Content>
             <Routes>
-                <Route path="/" element={<Main />}/>
-                <Route path="/calendar" element={<CalendarObserver />}/>
+                <Route path="/" element={<Main/>}/>
+                <Route path="/calendar" element={<CalendarObserver/>}/>
             </Routes>
         </Content>
     )

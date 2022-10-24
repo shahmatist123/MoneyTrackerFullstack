@@ -1,20 +1,16 @@
 import React, {useEffect, useState} from 'react';
-
 import styled from 'styled-components'
-import {getPerMonth} from "../../api/MoneyApi/MoneyApi";
-import {moneyItem, moneyPurchase} from "../../types/moneyI";
-import {getApiValues} from "../../utils";
+import {moneyItem, moneyPurchase, tickets} from "../../types/moneyI";
 import {useMoneyStore} from "../../helpers/useStore";
-import {Observer} from 'mobx-react';
-import {MoneyProvider} from '../../helpers/moneyProvider';
-import {moneyListS} from "../../Store/store/store";
-import {computed, toJS} from 'mobx'
+import {getPerMonth, getTickets} from "../../api/MoneyApi/MoneyApi";
+import CalendarModal from "./CalendarModal";
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   flex-wrap: wrap;
   grid-gap: 1px;
+  position: relative;
 `
 const Day = styled.span`
   color: #fff;
@@ -58,10 +54,11 @@ const getLastDay = (): number => {
 }
 
 interface CalendarI {
-    onClickCell: (money: moneyPurchase|undefined) => void
+    onClickCell: (money: moneyPurchase | undefined) => void
 }
 
 const CalendarGrid = (props: CalendarI) => {
+    const [modalData, setModalData] = useState({})
     const date = new Date();
     const [month, setMounth] = useState(date.getMonth());
     const [cellHeight, setCellHeight] = useState(0)
@@ -77,17 +74,16 @@ const CalendarGrid = (props: CalendarI) => {
         window.addEventListener('resize', resizeWindow)
         return () => window.removeEventListener("resize", resizeWindow);
     }, [])
-
     const getSumMoney = (money: moneyItem): string => {
         let sum = 0;
-        money?.tickets.forEach(ticket => {
+        money?.tickets?.forEach(ticket => {
             sum += ticket.summ
         })
-        money?.purchases.forEach(purchase => {
+        money?.purchases?.forEach(purchase => {
             sum += purchase.summ * 100
         })
         const strSum = (sum + "").split("")
-        return sum ? strSum.splice(0,  strSum.length - 2).join("") : "0"
+        return sum ? strSum.splice(0, strSum.length - 2).join("") : "0"
     }
 
     const getContent = (i: number): JSX.Element => {
@@ -105,7 +101,7 @@ const CalendarGrid = (props: CalendarI) => {
     const getCell = (i: number): JSX.Element => {
         const currentMoney = money[i]
         return (
-            <Cell key={i} style={{height: cellHeight}}>
+            <Cell key={i} style={{height: cellHeight}} onClick={() => setModalData(currentMoney)}>
                 {getContent(i)}
             </Cell>
         )
@@ -120,9 +116,15 @@ const CalendarGrid = (props: CalendarI) => {
     }
 
     return (
-        <Grid>
-            {getGrid()}
-        </Grid>
+        <>
+            <Grid>
+                {getGrid()}
+            </Grid>
+
+            {modalData && Object.values(modalData).length && (
+                <CalendarModal setModalData={(data: moneyItem) => setModalData(data)} modalData={modalData}/>
+            )}
+        </>
     )
 }
 

@@ -1,5 +1,7 @@
 import axios from "axios";
 import {config} from "../../../config/config";
+import {useState} from "react";
+import {tickets} from "../../types/moneyI";
 
 interface DataI {
     category: Array<number>,
@@ -10,7 +12,9 @@ interface DataI {
 export const add = (data: DataI): Promise<any> => {
     return axios.post(`${config.url}/api/money/add`, data);
 }
-
+export const getTickets = (data: tickets): Promise<any> => {
+    return axios.get(`${config.url}/api/money/get-ticket-items?userId=${data.userId}&ticketId=${data.id}`);
+}
 export const addFile = (data: any): Promise<any> => {
     return axios.post(`${config.url}/api/money/add-file`, data);
 }

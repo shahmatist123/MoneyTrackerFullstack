@@ -13,7 +13,7 @@ export class moneyListS {
     }
 
     @action
-    addMoney = (key: number,money: moneyItem) => {
+    addMoney = (key: number, money: moneyItem) => {
         this.moneyList[key] = money;
     }
     //
