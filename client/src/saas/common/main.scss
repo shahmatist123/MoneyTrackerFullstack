@@ -1,5 +1,5 @@
 body{
-  font-family: "RobotoCondensed", sans-serif;
+  font-family: "Roboto", sans-serif;
   text-decoration: none;
 }
 a {
@@ -7,5 +7,6 @@ a {
   text-decoration: none;
 }
 *, *:after, *:before{
+  outline: none;
   box-sizing: border-box;
 }

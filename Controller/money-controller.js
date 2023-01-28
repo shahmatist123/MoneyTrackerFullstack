@@ -47,22 +47,22 @@ exports.addFile = (req, res) => {
                 const market = resultObj.user
                 const summ = resultObj.totalSum
 
-
+                console.log(year, month, day, market, summ)
                 db.connect((err, client, done) => {
                     client.query(`INSERT INTO moneydb.tickets ("userId", year, month, day, market, summ)
                                   VALUES ('1', '${year}', '${month}', ${day}, '${market}', ${summ})
                                   RETURNING id;`, (error, result) => {
-                        let ticketId = result.rows[0].id;
                         if (error) {
                             response.status(400, error, res)
                             return
                         }
+                        let ticketId = result.rows[0].id;
                         if (ticketId) {
                             let errorItems
                             resultObj?.items.forEach(ticketItem => {
-                                client.query(`INSERT INTO moneydb.ticketitems (name, price, summ, quantity, "ticketId")
+                                client.query(`INSERT INTO moneydb.ticketitems (name, price, summ, quantity, "ticketId", "userId")
                                               VALUES ('${ticketItem.name}', ${ticketItem.price}, ${ticketItem.sum},
-                                                      '${ticketItem.quantity}', ${ticketId});`, (error) => {
+                                                      '${ticketItem.quantity}', ${ticketId}, 1);`, (error) => {
                                     if (error) {
                                         errorItems = error
                                     }
@@ -82,6 +82,47 @@ exports.addFile = (req, res) => {
         if (Object.keys(files).length === 0) {
             response.status(400, {message: 'Файл не найден'}, res)
         }
+    })
+}
+
+exports.addFileForTelegram = (req, res, ctx) => {
+    const data = req.data
+    const resultObj = data
+    const date = new Date(resultObj.localDateTime)
+    const month = date.getMonth()
+    const year = date.getFullYear()
+    const day = date.getDate()
+    const market = resultObj.user
+    const summ = resultObj.totalSum
+
+    db.connect((err, client, done) => {
+        client.query(`INSERT INTO moneydb.tickets ("userId", year, month, day, market, summ)
+                                  VALUES ('1', '${year}', '${month}', ${day}, '${market}', ${summ})
+                                  RETURNING id;`, (error, result) => {
+            if (error) {
+                ctx.reply('Сервер сдох')
+                return
+            }
+            let ticketId = result.rows[0].id;
+            if (ticketId) {
+                let errorItems
+                resultObj?.items.forEach(ticketItem => {
+                    client.query(`INSERT INTO moneydb.ticketitems (name, price, summ, quantity, "ticketId", "userId")
+                                              VALUES ('${ticketItem.name}', ${ticketItem.price}, ${ticketItem.sum},
+                                                      '${ticketItem.quantity}', ${ticketId}, 1);`, (error) => {
+                        if (error) {
+                            errorItems = error
+                        }
+                    })
+                })
+                if (errorItems) {
+                    ctx.reply('Сервер сдох')
+                } else {
+                    ctx.reply('Минус бабки(я всё сохранил)')
+                }
+            }
+        })
+        done()
     })
 }
 
@@ -105,7 +146,7 @@ exports.getMoneyPerMouth = (req, res) => {
                 client.query(`Select *
                       from moneydb.tickets
                       where year IN ('${year}')
-                        AND month IN ('${month-1}')
+                        AND month IN ('${month - 1}')
                         AND "userId" IN (${userId})`, (error, result) => {
                     if (error) {
                         console.log(error)
@@ -129,17 +170,19 @@ exports.getMoneyPerMouth = (req, res) => {
 }
 exports.getTicketItems = (req, res) => {
     const data = req.query
-    const ticketId = data.ticketId
+    const {ticketId, userId} = data
     db.connect((err, client, done) => {
         client.query(`SELECT *
                       FROM moneydb.ticketitems
-                      where "ticketId" in (${ticketId});`, (error, result) => {
+                      where "ticketId" in (${ticketId})
+                      and "userId" in (${userId});`, (error, result) => {
             if (error) {
                 console.log(error)
                 response.status(400, error, res)
-            } else{
+            } else {
                 response.status(200, result.rows, res)
             }
         })
+        done()
     })
 }

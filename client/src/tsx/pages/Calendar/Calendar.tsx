@@ -1,7 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CalendarGrid from "../../components/CalendarGrid/CalendarGrid";
 import {moneyPurchase} from "../../types/moneyI";
 import styled from "styled-components";
+import CalendarSidebar from "../../components/CalendarSidebar/CalendarSidebar";
+import {useAppDispatch} from "../../../store/store";
+import moneySlice, {currentMonthSelector, currentYearSelector, fetchMoneys} from "./moneySlice";
+import {useSelector} from "react-redux";
+
 
 const Modal = styled.span`
   position: fixed;
@@ -24,7 +29,15 @@ const Bg = styled.span`
   z-index: 100;
 `
 
+const CalendarWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+`
+
 const Calendar = () => {
+    const dispatch = useAppDispatch()
+    const year = useSelector(currentYearSelector)
+    const month = useSelector(currentMonthSelector)
     const [activeMoney, setActiveMoney] = useState<moneyPurchase>({
         category: "",
         date: "",
@@ -38,14 +51,19 @@ const Calendar = () => {
         money && setActiveMoney(money)
     }
 
+    useEffect(() => {
+        dispatch(fetchMoneys({year, month}))
+    }, [year, month])
+
     return (
-        <>
+        <CalendarWrapper>
             {activeMoney.id !== 0 && (<>
                 <Modal>{activeMoney.summ}</Modal>
                 <Bg onClick={() => setActiveMoney({...activeMoney, id: 0})}></Bg>
             </>)}
             <CalendarGrid onClickCell={onClickCell}/>
-        </>
+            <CalendarSidebar/>
+        </CalendarWrapper>
     )
 }
 

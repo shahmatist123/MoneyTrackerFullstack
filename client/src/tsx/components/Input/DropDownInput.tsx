@@ -11,7 +11,7 @@ interface LabelObjI {
 const Wrapper = styled.div`
   position: absolute;
   left: 0;
-  bottom: 1px;
+  bottom: 5px;
   transform: translateY(100%);
   z-index: 10;
   width: 100%;
@@ -20,7 +20,8 @@ const Wrapper = styled.div`
   align-items: flex-start;
   padding: 10px 20px;
   background: #fff;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 5px ${props => props.theme.borderColor};
+  border: 1px solid ${props => props.theme.borderColor};
 `
 const Container = styled.div`
   position: relative;
@@ -31,9 +32,12 @@ const Input = styled.div`
   display: block;
   width: 100%;
   height: 42px;
-  border: 1px solid #282c34;
+  box-shadow: 0 0 5px ${props => props.theme.borderColor};
+  border: 1px solid ${props => props.theme.borderColor};
   text-align: start;
   cursor: pointer;
+  color: ${props => props.theme.textColor};
+  border-radius: 10px;
 `
 const Label = styled.label`
   display: flex;

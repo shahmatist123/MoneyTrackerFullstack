@@ -17,6 +17,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/icons": "^4.11.3",
+    "@mdi/font": "^7.0.96",
+    "axios": "^1.2.5",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "concurrently": "^7.0.0",
@@ -25,16 +28,26 @@
     "express": "^4.17.2",
     "formidable": "^2.0.1",
     "fs": "^0.0.1-security",
+    "input": "^1.0.1",
     "jsonwebtoken": "^8.5.1",
+    "material-icons": "^1.12.1",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.2",
     "nodemon": "^1.19.4",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "pg": "^8.7.3",
+    "telegraf": "^4.11.2",
+    "telegram": "^2.15.5",
     "validator": "^13.7.0"
   },
   "engines": {
     "node": "16.13.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   }
 }

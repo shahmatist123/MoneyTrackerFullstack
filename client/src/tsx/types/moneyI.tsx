@@ -11,7 +11,8 @@ export interface tickets {
     id: number,
     userId: number,
     day: number,
-    summ: number
+    summ: number,
+    market: string
 }
 export interface moneyItem {
     purchases: moneyPurchase[],

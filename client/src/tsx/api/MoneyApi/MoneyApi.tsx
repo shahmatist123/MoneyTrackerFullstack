@@ -14,7 +14,6 @@ export const add = (data: DataI): Promise<any> => {
 export const addFile = (data: any): Promise<any> => {
     return axios.post(`${config.url}/api/money/add-file`, data);
 }
-export const getPerMonth = (): Promise<any> => {
-    const date = new Date
-    return axios.get(`${config.url}/api/money/get-money-per-mouth?id=1&month=${date.getMonth() + 1}&year=${date.getFullYear()}`);
+export const getPerMonth = (month: number, year: number): Promise<any> => {
+    return axios.get(`${config.url}/api/money/get-money-per-mouth?id=1&month=${month + 1}&year=${year}`);
 }

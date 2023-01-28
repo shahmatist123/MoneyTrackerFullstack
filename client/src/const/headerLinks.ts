@@ -1,13 +1,21 @@
 const headerLinks = [{
-    name: "Главная",
-    url: "/",
+    name: "Dashboard",
+    url: "stats",
     isAuth: true
 }, {
-    name: "Календарь",
+    name: "Calendar",
     url: "calendar",
     isAuth: true
 }, {
-    name: "Статистика",
+    name: "Add purchase",
+    url: "stats",
+    isAuth: true
+}, {
+    name: "Add ticket",
+    url: "stats",
+    isAuth: true
+}, {
+    name: "Categories",
     url: "stats",
     isAuth: true
 },]

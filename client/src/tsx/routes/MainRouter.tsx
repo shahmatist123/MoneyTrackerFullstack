@@ -5,17 +5,19 @@ import {
 } from "react-router-dom";
 import Main from "../pages/Main";
 import styled from "styled-components";
-import CalendarObserver from "../pages/Calendar/CalendarObserver";
+import Calendar from "../pages/Calendar/Calendar";
 
 const Content = styled.div`
-  margin-top: 50px;
+  margin-top: 35px;
+  flex: 1 1 100%;
+  padding-left: 193px;
 `
 const MainRouter = () => {
     return (
         <Content>
             <Routes>
                 <Route path="/" element={<Main />}/>
-                <Route path="/calendar" element={<CalendarObserver />}/>
+                <Route path="/calendar" element={<Calendar />}/>
             </Routes>
         </Content>
     )
