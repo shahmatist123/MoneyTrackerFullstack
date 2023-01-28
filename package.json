@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "prodServer": "cross-env NODE_ENV=prod nodemon index.js",
+    "devServer": "cross-env NODE_ENV=dev nodemon index.js",
     "client": "npm run start --prefix client",
     "devClient": "npm run build --prefix client",
-    "dev": "concurrently \"npm run client\" \"npm run start\"",
-    "prod": "concurrently \"npm run devClient\" \"npm run start\""
+    "dev": "concurrently \"npm run client\" \"npm run devServer\""
   },
   "keywords": [
     "node",
@@ -25,6 +25,7 @@
     "concurrently": "^7.0.0",
     "config": "^3.3.7",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.17.2",
     "formidable": "^2.0.1",
     "fs": "^0.0.1-security",

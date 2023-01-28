@@ -29,24 +29,27 @@ const {addFileForTelegram} = require("./Controller/money-controller");
 app.listen(port, () =>{
     console.log(`App listen on port: ${port}`)
 })
-const token = config.get('TELEGRAM')
-const bot = new Telegraf(token) //сюда помещается токен, который дал botFather
-bot.start((ctx) => ctx.reply('Здарова, показывай сколько потратил')) //ответ бота на команду /start
-bot.help((ctx) => ctx.reply('Send me a sticker')) //ответ бота на команду /help
-bot.on('sticker', (ctx) => ctx.reply('')) //bot.on это обработчик введенного юзером сообщения, в данном случае он отслеживает стикер, можно использовать обработчик текста или голосового сообщения
-bot.on('message', async (ctx) => {
-    const {message} = ctx
-    if(message.document){
-        const {document} = message
-        axios.get(`https://api.telegram.org/bot${token}/getFile?file_id=${document.file_id}`).then((req, res) => {
-            axios.get(`https://api.telegram.org/file/bot${token}/${req.data.result.file_path}`).then((req, res) => {
-                addFileForTelegram(req, res, ctx)
+
+if (process.env.NODE_ENV === 'dev') {
+    const token = config.get('TELEGRAM')
+    const bot = new Telegraf(token) //сюда помещается токен, который дал botFather
+    bot.start((ctx) => ctx.reply('Здарова, показывай сколько потратил')) //ответ бота на команду /start
+    bot.help((ctx) => ctx.reply('Send me a sticker')) //ответ бота на команду /help
+    bot.on('sticker', (ctx) => ctx.reply('')) //bot.on это обработчик введенного юзером сообщения, в данном случае он отслеживает стикер, можно использовать обработчик текста или голосового сообщения
+    bot.on('message', async (ctx) => {
+        const {message} = ctx
+        if (message.document) {
+            const {document} = message
+            axios.get(`https://api.telegram.org/bot${token}/getFile?file_id=${document.file_id}`).then((req, res) => {
+                axios.get(`https://api.telegram.org/file/bot${token}/${req.data.result.file_path}`).then((req, res) => {
+                    addFileForTelegram(req, res, ctx)
+                }).catch(() => {
+                    ctx.reply('Сервер сдох 1')
+                })
             }).catch(() => {
-                ctx.reply('Сервер сдох 1')
+                ctx.reply('Сервер сдох 2')
             })
-        }).catch(() => {
-            ctx.reply('Сервер сдох 2')
-        })
-    }
-}) //bot.on это обработчик введенного юзером сообщения, в данном случае он отслеживает стикер, можно использовать обработчик текста или голосового сообщения
-bot.launch() // запуск бота
+        }
+    }) //bot.on это обработчик введенного юзером сообщения, в данном случае он отслеживает стикер, можно использовать обработчик текста или голосового сообщения
+    bot.launch() // запуск бота
+}
