@@ -10,3 +10,15 @@ a {
   outline: none;
   box-sizing: border-box;
 }
+*{
+  &::-webkit-scrollbar-thumb {
+    background-color: #292A2F;
+    border: 1px solid #383838;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #232429;
+  }
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+}

@@ -1,12 +1,14 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {getPerMonth} from "../../api/MoneyApi/MoneyApi";
+import {moneyItem} from "../../types/moneyType";
 
 const date = new Date()
 
 const initialState = {
     moneys: {},
     currentYear: date.getFullYear(),
-    currentMonth: date.getMonth()
+    currentMonth: date.getMonth(),
+    focusedDay: null
 }
 
 export const fetchMoneys = createAsyncThunk(
@@ -27,6 +29,9 @@ const moneySlice = createSlice({
         changeYear: (state, action) => {
             state.currentYear = action.payload
         },
+        changeFocusedDay: (state, action) => {
+            state.focusedDay = action.payload
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -40,5 +45,7 @@ const moneySlice = createSlice({
 export const moneySelector = (state: any) => state.money.moneys
 export const currentYearSelector = (state: any) => state.money.currentYear
 export const currentMonthSelector = (state: any) => state.money.currentMonth
+export const focusedDaySelector = (state: any) => state.money.focusedDay
+export const currentMoneySelector = (state: any) => moneySelector(state)[state.money.focusedDay]
 
 export default moneySlice

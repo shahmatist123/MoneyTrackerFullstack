@@ -4,4 +4,5 @@ module.exports = (app) =>{
     app.route('/api/money/add-file').post(moneyController.addFile)
     app.route('/api/money/get-money-per-mouth').get(moneyController.getMoneyPerMouth)
     app.route('/api/money/get-ticket-items').get(moneyController.getTicketItems)
+    app.route('/api/money/set-favorite-ticket-items').get(moneyController.setFavorite)
 }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import CalendarGrid from "../../components/CalendarGrid/CalendarGrid";
-import {moneyPurchase} from "../../types/moneyI";
+import {moneyPurchase} from "../../types/moneyType";
 import styled from "styled-components";
 import CalendarSidebar from "../../components/CalendarSidebar/CalendarSidebar";
 import {useAppDispatch} from "../../../store/store";
@@ -61,7 +61,7 @@ const Calendar = () => {
                 <Modal>{activeMoney.summ}</Modal>
                 <Bg onClick={() => setActiveMoney({...activeMoney, id: 0})}></Bg>
             </>)}
-            <CalendarGrid onClickCell={onClickCell}/>
+            <CalendarGrid/>
             <CalendarSidebar/>
         </CalendarWrapper>
     )

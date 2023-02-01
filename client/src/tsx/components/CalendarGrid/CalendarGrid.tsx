@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 
 import styled from 'styled-components'
-import {moneyItem, moneyPurchase} from "../../types/moneyI";
+import {moneyItem, moneyPurchase} from "../../types/moneyType";
 import {useSelector} from "react-redux";
-import {moneySelector} from "../../pages/Calendar/moneySlice";
+import moneySlice, {currentMonthSelector, currentYearSelector, moneySelector} from "../../pages/Calendar/moneySlice";
+import {useAppDispatch} from "../../../store/store";
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 196px);
@@ -47,32 +48,14 @@ const Market = styled.span`
 const MarketWrapper = styled.div`
   margin-top: 22px;
 `
-const getLastDay = (): number => {
-    const newDate = new Date();
-    const month = newDate.getMonth()
-    newDate.setMonth(month + 1)
-    newDate.setDate(0)
-    return newDate.getDate()
-}
 
-interface CalendarI {
-    onClickCell: (money: moneyPurchase | undefined) => void
-}
-
-const CalendarGrid = (props: CalendarI) => {
+const CalendarGrid = () => {
+    const dispatch = useAppDispatch()
     const money = useSelector(moneySelector) || {}
+    const currentMonth = useSelector(currentMonthSelector)
+    const currentYear = useSelector(currentYearSelector)
     const date = new Date();
     date.setDate(1)
-    const lastDay = getLastDay()
-    // const resizeWindow = () => {
-    //     setCellHeight(window.outerWidth / 12);
-    // };
-    //
-    // useEffect(() => {
-    //     resizeWindow()
-    //     window.addEventListener('resize', resizeWindow)
-    //     return () => window.removeEventListener("resize", resizeWindow);
-    // }, [])
 
     const getSumMoney = (money: moneyItem): string => {
         let sum = 0;
@@ -87,13 +70,10 @@ const CalendarGrid = (props: CalendarI) => {
     }
 
     const getContent = (i: number): JSX.Element => {
-        const day = date.getDate()
         const currentMoney = money[i]
-        console.log(currentMoney)
-        date.setDate(day + 1)
         return (
                 <>
-                    <Day>Day №{day}</Day>
+                    <Day>Day №{i}</Day>
                     <Summ>
                         <SummIcon>
                             <g clipPath="url(#clip0_1_362)">
@@ -173,9 +153,8 @@ const CalendarGrid = (props: CalendarI) => {
     }
 
     const getCell = (i: number): JSX.Element => {
-        const currentMoney = money[i]
         return (
-            <Cell key={i}>
+            <Cell key={i} onClick={() => dispatch(moneySlice.actions.changeFocusedDay(i))}>
                 {getContent(i)}
             </Cell>
         )
@@ -183,8 +162,15 @@ const CalendarGrid = (props: CalendarI) => {
 
     const getGrid = (): JSX.Element[] => {
         const cells = []
-        for (let i = 1; i <= lastDay; i++) {
+        const date = new Date(currentYear,currentMonth, 1)
+        let i = 1
+        while (true) {
+            date.setDate(i)
+            if (currentMonth !== date.getMonth()) {
+                break
+            }
             cells.push(getCell(i))
+            i++
         }
         return cells
     }

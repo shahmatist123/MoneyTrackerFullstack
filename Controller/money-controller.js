@@ -186,3 +186,21 @@ exports.getTicketItems = (req, res) => {
         done()
     })
 }
+exports.setFavorite = (req, res) => {
+    const data = req.query
+    const {ticketId, userId} = data
+    db.connect((err, client, done) => {
+        client.query(`SELECT *
+                      FROM moneydb.ticketitems
+                      where "ticketId" in (${ticketId})
+                      and "userId" in (${userId});`, (error, result) => {
+            if (error) {
+                console.log(error)
+                response.status(400, error, res)
+            } else {
+                response.status(200, result.rows, res)
+            }
+        })
+        done()
+    })
+}

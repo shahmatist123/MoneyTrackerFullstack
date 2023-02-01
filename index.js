@@ -29,8 +29,8 @@ const {addFileForTelegram} = require("./Controller/money-controller");
 app.listen(port, () =>{
     console.log(`App listen on port: ${port}`)
 })
-
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV !== 'dev') {
+    console.log(process.env.NODE_ENV)
     const token = config.get('TELEGRAM')
     const bot = new Telegraf(token) //сюда помещается токен, который дал botFather
     bot.start((ctx) => ctx.reply('Здарова, показывай сколько потратил')) //ответ бота на команду /start

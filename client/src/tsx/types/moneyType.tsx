@@ -14,6 +14,17 @@ export interface tickets {
     summ: number,
     market: string
 }
+
+export interface ticketItem {
+    name: string,
+    price: number,
+    summ: number,
+    quantity: number,
+    ticketId: number,
+    id: number,
+    userId: number
+}
+
 export interface moneyItem {
     purchases: moneyPurchase[],
     tickets: tickets[]
