@@ -1,22 +1,28 @@
+import {dashboardPath} from "../tsx/pages/Dashboard";
+import {purchasesPath} from "../tsx/pages/AddPurchases";
+import {ticketPath} from "../tsx/pages/AddTicket";
+import {categoriesPath} from "../tsx/pages/Categories";
+import {calendarPath} from "../tsx/pages/Calendar/Calendar";
+
 const headerLinks = [{
     name: "Dashboard",
-    url: "stats",
+    url: dashboardPath,
     isAuth: true
 }, {
     name: "Calendar",
-    url: "calendar",
+    url: calendarPath,
     isAuth: true
 }, {
     name: "Add purchase",
-    url: "stats",
+    url: purchasesPath,
     isAuth: true
 }, {
     name: "Add ticket",
-    url: "stats",
+    url: ticketPath,
     isAuth: true
 }, {
     name: "Categories",
-    url: "stats",
+    url: categoriesPath,
     isAuth: true
 },]
 export default headerLinks;

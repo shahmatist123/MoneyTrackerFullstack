@@ -1,3 +1,5 @@
+import {categorySelector} from "../tsx/pages/categorySlice";
+
 const formAddInputs = [
     {
         type: "text",
@@ -10,14 +12,10 @@ const formAddInputs = [
         name: "summ"
     },
     {
-        type: "dropDownC",
-        placeholder: "Категория",
-        name: "category"
-    },
-    {
         type: "dropDownR",
-        placeholder: "Магазин",
-        name: "market"
+        placeholder: "Категория",
+        name: "category",
+        values: categorySelector
     },
     {
         type: "submit",

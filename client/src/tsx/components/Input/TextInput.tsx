@@ -10,13 +10,10 @@ const Input = styled.input`
   width: 100%;
   border: 1px solid #282c34;
 `
+
 const TextInput = (props: P) => {
-    const [value, setValue] = useState("");
-    const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        props.onChangeInput && props.onChangeInput(props.name, e.target.value as string);
-    }
     return(
-        <Input type="text" onChange={inputChange} name={props.name} placeholder={props.placeholder} id=""/>
+        <Input id="" {...props}/>
     )
 }
 

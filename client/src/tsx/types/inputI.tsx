@@ -1,8 +1,13 @@
 export interface P {
     type: string,
-    placeholder: string,
-    name: string,
-    onChangeInput?: (name: string, value: number|string|number[]) => void,
+    placeholder?: string,
+    name?: string,
+    onChangeInput?: (name: string | undefined, value: number|string|number[]) => void,
     onSubmit?: () => void,
-    mask?: string;
+    mask?: string,
+    value?: string,
+    onClick?: () => void,
+    onChange?: (value: any) => void,
+    checked?: boolean,
+    values?: any
 }

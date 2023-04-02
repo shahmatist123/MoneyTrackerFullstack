@@ -9,7 +9,7 @@ exports.add = (req, res) => {
     const data = req.body
     const fullDate = time.fullDateHelper()
     let addMoney = `INSERT INTO moneydb.purchaselist
-                        (name, category, market, userid, summ, date)
+                        (name, category_id, market, userid, summ, date)
                     VALUES ('${data.msg}', '${types.arrayToString(data.category)}', '${data.market}', '1', '${data.summ}
                             ',
                             '${fullDate}')`
@@ -133,6 +133,7 @@ exports.getMoneyPerMouth = (req, res) => {
     const userId = data?.userId || 1
     let purchaseList
     let tickets
+
     db.connect((err, client, done) => {
         client.query(`SELECT *
                       FROM moneydb.purchaselist

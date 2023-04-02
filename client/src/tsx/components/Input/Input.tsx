@@ -13,6 +13,21 @@ const InputSubmit = styled.input`
   width: 100%;
   cursor: pointer;
 `
+const InputCheckbox = styled.input`
+  outline: none;
+  padding: 10px 30px;
+  width: 14px;
+  margin-right: 15px;
+  cursor: pointer;
+`
+
+const SpanCheckbox = styled.span`
+  color: #fff;
+`
+const LabelCheckbox = styled.label`
+  display: flex;
+  align-items: center;
+`
 
 const getCurrentInput = (props: P): JSX.Element | undefined => {
     switch (props.type) {
@@ -23,11 +38,18 @@ const getCurrentInput = (props: P): JSX.Element | undefined => {
         case "dropDownR":
             return <DropDownInput {...props}/>
         case "submit":
-            return <InputSubmit onClick={props.onSubmit} type="submit"/>
+            return <InputSubmit onClick={props.onSubmit} {...props}/>
         case "inputSumm":
             return <SumInput {...props}/>
         case "file":
             return <FileInput {...props}/>
+        case "checkbox":
+            return <>
+                <LabelCheckbox>
+                    <InputCheckbox {...props}/>
+                    <SpanCheckbox>{props.placeholder}</SpanCheckbox>
+                </LabelCheckbox>
+            </>
     }
 }
 

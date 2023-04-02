@@ -7,6 +7,7 @@ import {useAppDispatch} from "../../../store/store";
 import moneySlice, {currentMonthSelector, currentYearSelector, fetchMoneys} from "./moneySlice";
 import {useSelector} from "react-redux";
 
+export const calendarPath = "calendar"
 
 const Modal = styled.span`
   position: fixed;

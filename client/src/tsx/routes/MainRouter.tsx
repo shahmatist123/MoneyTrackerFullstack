@@ -3,9 +3,12 @@ import {
     Routes,
     Route,
 } from "react-router-dom";
-import Main from "../pages/Main";
 import styled from "styled-components";
-import Calendar from "../pages/Calendar/Calendar";
+import Calendar, {calendarPath} from "../pages/Calendar/Calendar";
+import Dashboard, {dashboardPath} from "../pages/Dashboard";
+import AddPurchases, {purchasesPath} from "../pages/AddPurchases";
+import AddTicket, {ticketPath} from "../pages/AddTicket";
+import Categories, {categoriesPath} from "../pages/Categories";
 
 const Content = styled.div`
   margin-top: 35px;
@@ -16,8 +19,11 @@ const MainRouter = () => {
     return (
         <Content>
             <Routes>
-                <Route path="/" element={<Main />}/>
-                <Route path="/calendar" element={<Calendar />}/>
+                <Route path={dashboardPath} element={<Dashboard />}/>
+                <Route path={calendarPath} element={<Calendar />}/>
+                <Route path={purchasesPath} element={<AddPurchases />}/>
+                <Route path={ticketPath} element={<AddTicket />}/>
+                <Route path={categoriesPath} element={<Categories />}/>
             </Routes>
         </Content>
     )

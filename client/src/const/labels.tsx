@@ -13,19 +13,4 @@ export const labels: { [key: string]: any } = {
             name: "Семья"
         },
     ],
-    category: [
-        {
-            id: 4,
-            name: "1"
-        },
-        {
-            id: 5,
-            name: "2"
-        },
-        {
-            id: 6,
-            name: "3"
-        },
-    ]
-
 }

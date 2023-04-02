@@ -22,6 +22,8 @@ const favoriteRoutes = require('./routes/money-favorite-router')
 favoriteRoutes(app)
 const themeRoutes = require('./routes/theme-router')
 themeRoutes(app)
+const categoryRoutes = require('./routes/category-router')
+categoryRoutes(app)
 const statisticRoutes = require('./routes/statistic-router')
 const axios = require("axios");
 const {addFileForTelegram} = require("./Controller/money-controller");

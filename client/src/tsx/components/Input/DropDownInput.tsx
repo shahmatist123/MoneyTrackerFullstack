@@ -2,6 +2,7 @@ import React, {Dispatch, useEffect, useState} from 'react';
 import styled from 'styled-components'
 import {labels} from "../../../const/labels";
 import {P} from "../../types/inputI";
+import {useSelector} from "react-redux";
 
 interface LabelObjI {
     id: number,
@@ -50,18 +51,19 @@ const Label = styled.label`
 
 const DropDownInput = (props: P) => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const [checkboxState, setCheckboxState] = useState<Array<number>>([]);
+    const [checkboxState, setCheckboxState] = useState<number>();
+    const value: {id: number, name: string}[] = useSelector(props.values)
     const getLabels = (): JSX.Element[] => {
-        return labels[props.name].map((label: LabelObjI) => {
+        return value.map((label: LabelObjI) => {
             return (
                 <Label key={label.id}>
                     <span>
                         {label.name}
                     </span>
                     {props.type === "dropDownC" ? (
-                        <input onChange={() => checkboxClick(label.id)} checked={!!checkboxState.find(item => item === label.id)} type="checkbox"/>
+                        <input onChange={() => checkboxClick(label.id)} checked={checkboxState === label.id} type="checkbox"/>
                     ) : (
-                        <input onChange={() => radioClick(label.id)} checked={!!checkboxState.find(item => item === label.id)} type="radio"/>
+                        <input onChange={() => radioClick(label.id)} checked={checkboxState === label.id} type="radio"/>
                     )}
 
                 </Label>
@@ -69,35 +71,28 @@ const DropDownInput = (props: P) => {
         })
     }
 
-    const getName = (): Array<string> => {
-        if (checkboxState.length) {
-            return checkboxState.map(item => {
-                const label = labels[props.name].find((label: LabelObjI) => label.id === item);
-                return label ? label.name + " " : "";
-            })
+    const getName = (): string => {
+        if (checkboxState) {
+            return value.find((label: LabelObjI) => label.id === checkboxState)?.name || "";
         }
-        return [props.placeholder];
+        return props.placeholder || "";
     }
 
     const checkboxClick = (id: number) => {
         openModal();
-        const isFind = checkboxState.find(item => item === id);
-        if (isFind) {
-            setCheckboxState(checkboxState.filter(item => item !== id))
-            return;
-        }
-        setCheckboxState([...checkboxState, id]);
+
+        setCheckboxState(id);
     }
     const radioClick = (id: number) => {
         openModal();
-        setCheckboxState([id]);
+        setCheckboxState(id);
     }
 
     const openModal = () => {
         setIsModalVisible(!isModalVisible);
     }
     useEffect(() => {
-        props.onChangeInput && props.onChangeInput(props.name, checkboxState);
+        checkboxState && props.onChangeInput && props.onChangeInput(props.name, checkboxState);
     }, [checkboxState])
     return (
         <Container>
