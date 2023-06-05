@@ -80,7 +80,6 @@ const DropDownInput = (props: P) => {
 
     const checkboxClick = (id: number) => {
         openModal();
-
         setCheckboxState(id);
     }
     const radioClick = (id: number) => {
