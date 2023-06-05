@@ -205,3 +205,36 @@ exports.setFavorite = (req, res) => {
         done()
     })
 }
+exports.deletePurchase = (req, res) => {
+    const query = `
+    DELETE FROM moneydb.purchaselist
+    WHERE id = $1;
+  `;
+    const data = req.query
+    const {id} = data
+    const values = [id];
+    db.query(query, values).then(() => {
+        response.status(200, "", res)
+    }).catch((err) => {
+        response.status(400, err, res)
+    })
+};
+
+exports.deleteTicket = (req, res) => {
+    const query1 = `
+    DELETE FROM moneydb.tickets
+    WHERE id = $1;
+  `;
+    const query2 = `
+    DELETE FROM moneydb.ticketitems
+    WHERE "ticketId" = $1;
+  `;
+    const data = req.query
+    const {id} = data
+    const values = [id];
+    db.query(query2, values).then(() => db.query(query1, values)).then(() => {
+        response.status(200, "", res)
+    }).catch((err) => {
+        response.status(400, err, res)
+    })
+};

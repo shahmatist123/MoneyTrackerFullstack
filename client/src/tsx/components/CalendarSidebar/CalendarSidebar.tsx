@@ -11,7 +11,9 @@ import moneySlice, {
 import {useSelector} from "react-redux";
 import {useAppDispatch} from "../../../store/store";
 import {getMoneyItems} from "../../api/MoneyApi/MoneyApi";
-import {ticketItem, tickets} from "../../types/moneyType";
+import {moneyPurchase, ticketItem, tickets} from "../../types/moneyType";
+import {categorySelector, CatItemI} from "../../pages/categorySlice";
+import Modal from "../Modal/Modal";
 
 const Header = styled.div`
   display: flex;
@@ -78,7 +80,7 @@ const Body = styled.div`
   margin-top: 35px;
   border-radius: 20px;
   background: ${props => props.theme.bgLight};
-  padding: 0 22px 0 16px;
+  padding: 22px;
   color: #fff;
   transition: all 0.5s;
   margin-left: 0;
@@ -86,10 +88,6 @@ const Body = styled.div`
   overflow-y: auto;
   flex: 1 1 auto;
   position: relative;
-
-  :hover {
-    margin-left: -300px;
-  }
 `
 const BodyHeader = styled.div`
   font-weight: 700;
@@ -97,7 +95,6 @@ const BodyHeader = styled.div`
   text-align: center;
   flex: 0 0 auto;
   padding-bottom: 11px;
-  padding-top: 11px;
   margin-right: -22px;
   margin-left: -16px;
   background: ${props => props.theme.bgLight};
@@ -110,8 +107,6 @@ const Sum = styled.div`
   font-size: 16px;
   text-align: center;
   flex: 0 0 auto;
-  margin-right: -22px;
-  margin-left: -16px;
   padding-bottom: 11px;
   padding-top: 11px;
   background: ${props => props.theme.bgLight};
@@ -164,6 +159,9 @@ const Item = styled.div`
   align-items: flex-start;
   position: relative;
   margin-bottom: 6px;
+  color: #fff;
+  max-height: 100%;
+  padding: 0 20px;
   &:hover ${Markers}{
     opacity: 1;
     pointer-events: all;
@@ -185,6 +183,23 @@ const MarkersTrue = styled.div`
   margin-right: 10px;
   cursor: pointer;
 `
+const MoneyItem = styled.div`
+  display: flex;flex-flow: column;
+  gap: 25px;
+  align-items: center;
+  flex: 0 0 45%;
+  cursor: pointer;
+`
+const BodyWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`
+const ModalWrapper = styled.div`
+  padding-top: 40px;
+  max-height: 100%;
+  overflow: auto;
+`
+
 
 const CalendarSidebar = () => {
     const dispatch = useAppDispatch()
@@ -193,7 +208,8 @@ const CalendarSidebar = () => {
     const currentMonth = useSelector(currentMonthSelector)
     const currentMoney = useSelector(currentMoneySelector)
     const focusedDay = useSelector(focusedDaySelector)
-
+    const allCats = useSelector(categorySelector)
+    const [isVisibleModal, setIsVisibleModal] = useState(false)
     const changeMonth = (month: number) => {
         dispatch(moneySlice.actions.changeMonth(month))
     }
@@ -254,26 +270,44 @@ const CalendarSidebar = () => {
             {currentMoney && !!Object.keys(currentMoney).length &&
                 <Body>
                     <BodyHeader>Day №{focusedDay}</BodyHeader>
-                    {currentMoneys.map(item => (
-                        <Item key={item.id}>
-                            <Markers>
-                                <MarkersTrue></MarkersTrue>
-                                <MarkersFalse></MarkersFalse>
-                            </Markers>
-                            <ItemCounter>
-                                {item.quantity}
-                            </ItemCounter>
-                            <ItemInfo>
-                                {item.name}
-                            </ItemInfo>
-                            <ItemSum>
-                                {item.summ / 100}₽
-                            </ItemSum>
-                        </Item>))}
-
-                    <Sum>{currentMoneys.reduce((acc, next) => acc += Math.floor(next.summ / 100), 0)}₽</Sum>
+                    <BodyWrapper>
+                    {currentMoney.tickets.map((item: tickets) => {
+                        return <MoneyItem onClick={() => setIsVisibleModal(true)}>
+                            <span>{item.market}</span>
+                            <span>{Math.floor(item.summ / 100)}</span>
+                        </MoneyItem>
+                    })}
+                    {currentMoney.purchases.map((item: moneyPurchase) => {
+                        return <MoneyItem onClick={() => setIsVisibleModal(true)}>
+                            <span>{item.name || allCats.find((cat: CatItemI) => cat.id === item.categoryId)?.name}</span>
+                            <span>{Math.floor(item.summ / 100)}</span>
+                        </MoneyItem>
+                    })}
+                    </BodyWrapper>
                 </Body>
             }
+            <Modal isOpenP={isVisibleModal}>
+                <ModalWrapper>
+                {currentMoneys.map(item => (
+                    <Item key={item.id}>
+                        <Markers>
+                            <MarkersTrue></MarkersTrue>
+                            <MarkersFalse></MarkersFalse>
+                        </Markers>
+                        <ItemCounter>
+                            {item.quantity}
+                        </ItemCounter>
+                        <ItemInfo>
+                            {item.name}
+                        </ItemInfo>
+                        <ItemSum>
+                            {item.summ / 100}₽
+                        </ItemSum>
+                    </Item>))}
+
+                <Sum>{currentMoneys.reduce((acc, next) => acc += Math.floor(next.summ / 100), 0)}₽</Sum>
+                </ModalWrapper>
+            </Modal>
         </Sidebar>)
 }
 export default CalendarSidebar

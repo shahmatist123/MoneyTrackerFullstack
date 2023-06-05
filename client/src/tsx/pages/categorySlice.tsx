@@ -1,8 +1,12 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {add, deleteCat, get} from "../api/CategoriesApi/CategoriesApi";
 
+export interface CatItemI {
+    id: number, name: string, is_positive: boolean
+}
+
 interface initialStateI {
-    categories: {id: number, name: string, is_positive: boolean}[]
+    categories: CatItemI[]
 }
 const initialState: initialStateI = {
     categories: []

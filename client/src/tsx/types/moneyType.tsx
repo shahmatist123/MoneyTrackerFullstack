@@ -5,7 +5,8 @@ export interface moneyPurchase {
     "summ": number,
     "date": string,
     "market": string,
-    "userId": number
+    "userId": number,
+    categoryId?: number
 }
 export interface tickets {
     id: number,
