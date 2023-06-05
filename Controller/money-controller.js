@@ -61,7 +61,7 @@ exports.addFile = (req, res) => {
                             let errorItems
                             resultObj?.items.forEach(ticketItem => {
                                 client.query(`INSERT INTO moneydb.ticketitems (name, price, summ, quantity, "ticketId", "userId")
-                                              VALUES ('${ticketItem.name}', ${ticketItem.price}, ${ticketItem.sum},
+                                              VALUES ('${ticketItem.name}', ${ticketItem.price}, ${ticketItem.sum + ticketItem.ndsSum},
                                                       '${ticketItem.quantity}', ${ticketId}, 1);`, (error) => {
                                     if (error) {
                                         errorItems = error
