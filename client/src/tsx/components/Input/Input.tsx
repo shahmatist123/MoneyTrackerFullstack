@@ -53,7 +53,6 @@ const getCurrentInput = (props: P): JSX.Element | undefined => {
     }
 }
 
-
 const Input = (props: P) => {
     const input = getCurrentInput(props)
     return(
