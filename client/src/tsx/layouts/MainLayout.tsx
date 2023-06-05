@@ -9,6 +9,7 @@ import {currentTheme, fetchTheme, themeSelector} from "../pages/themeSlice";
 import {useSelector} from "react-redux";
 import {fetchCategory} from "../pages/categorySlice";
 
+
 const StyledLayout = styled.div`
   display: flex;
   height: 100%;
