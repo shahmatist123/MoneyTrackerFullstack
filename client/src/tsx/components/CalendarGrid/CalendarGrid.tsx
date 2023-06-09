@@ -145,7 +145,7 @@ const CalendarGrid = () => {
                                     </clipPath>
                                 </defs>
                             </SummIcon>
-                            <Market>{currentMoney?.tickets?.length ? currentMoney?.tickets[0]?.market : "Украинский секс-шоп"}</Market>
+                            <Market>{currentMoney?.tickets?.length ? currentMoney?.tickets[0]?.market : "Польский секс-шоп"}</Market>
                         </Summ>
                     </MarketWrapper>
                 </>
