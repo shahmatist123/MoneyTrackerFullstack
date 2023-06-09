@@ -84,6 +84,7 @@ exports.addFile = (req, res) => {
         }
     })
 }
+
 exports.addFileForTelegram = (req, res, ctx) => {
     const data = req.data
     const resultObj = data
