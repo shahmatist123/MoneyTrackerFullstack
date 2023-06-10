@@ -7,4 +7,5 @@ module.exports = (app) =>{
     app.route('/api/money/set-favorite-ticket-items').get(moneyController.setFavorite)
     app.route('/api/money/delete-ticket').delete(moneyController.deleteTicket)
     app.route('/api/money/delete-purchase').delete(moneyController.deletePurchase)
+    app.route('/api/money/set-ticket-items-for-user').post(moneyController.setTicketItemsForUser)
 }

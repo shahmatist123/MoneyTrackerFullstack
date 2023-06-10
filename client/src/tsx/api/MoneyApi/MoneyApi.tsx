@@ -26,3 +26,6 @@ export const getMoneyItems = (ticketId: number): Promise<any> => {
 export const setFavorite = (ticketId: number): Promise<any> => {
     return axios.get(`${config.url}/api/money/get-ticket-items?ticketId=${ticketId}&userId=1`);
 }
+export const setTicketItemsForUser = (data: {calendarUserId: number, id: number}): Promise<any> => {
+    return axios.post(`${config.url}/api/money/set-ticket-items-for-user`, data);
+}

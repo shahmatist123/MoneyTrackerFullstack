@@ -15,6 +15,8 @@ import {moneyPurchase, ticketItem, tickets} from "../../types/moneyType";
 import {categorySelector, CatItemI} from "../../pages/categorySlice";
 import Modal from "../Modal/Modal";
 import Checkbox from "../Input/Checkbox";
+import {calendarUserSelector, fetchCalendarUser} from "../../pages/calendarUserSlice";
+import {MenuItem, Select} from "@mui/material";
 
 const Header = styled.div`
   display: flex;
@@ -219,6 +221,11 @@ const CalendarSidebar = () => {
     const allCats = useSelector(categorySelector)
     const [isVisibleModal, setIsVisibleModal] = useState(false)
     const [selectedItems, setSelectedItems] = useState<SelectedItems>({})
+    const [selectedUser, setSelectedUser] = useState<number>()
+    const calendarUsers = useSelector(calendarUserSelector)
+    useEffect(() => {
+        dispatch(fetchCalendarUser())
+    }, [])
     const changeMonth = (month: number) => {
         dispatch(moneySlice.actions.changeMonth(month))
     }
@@ -317,11 +324,23 @@ const CalendarSidebar = () => {
                         </Item>))}
 
                     </ModalWrapper>
-                    <Sum>{currentMoneys
-                        .filter((item) => {
-                            return selectedItems[item.id]?.checked
-                        })
-                        .reduce((acc, next) => acc += Math.floor(next.summ / 100), 0)}₽</Sum>
+                    <ModalWrapper>
+                        <Select
+                            value={selectedUser}
+                            label="Age"
+                            onChange={(value) => console.log(value)}
+                        >
+                            {calendarUsers.map((item: {id: number, name: string}) => {
+                                return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+                            })}
+                        </Select>
+                        <Sum>{currentMoneys
+                            .filter((item) => {
+                                return selectedItems[item.id]?.checked
+                            })
+                            .reduce((acc, next) => acc += Math.floor(next.summ / 100), 0)}₽</Sum>
+
+                    </ModalWrapper>
                 </ModalContainer>
             </Modal>
         </Sidebar>)
