@@ -10,13 +10,13 @@ import moneySlice, {
 } from "../../pages/Calendar/moneySlice";
 import {useSelector} from "react-redux";
 import {useAppDispatch} from "../../../store/store";
-import {getMoneyItems} from "../../api/MoneyApi/MoneyApi";
+import {deleteTicket, getMoneyItems, setTicketItemsForUser} from "../../api/MoneyApi/MoneyApi";
 import {moneyPurchase, ticketItem, tickets} from "../../types/moneyType";
 import {categorySelector, CatItemI} from "../../pages/categorySlice";
 import Modal from "../Modal/Modal";
 import Checkbox from "../Input/Checkbox";
 import {calendarUserSelector, fetchCalendarUser} from "../../pages/calendarUserSlice";
-import {MenuItem, Select} from "@mui/material";
+import {Box, Button, ButtonGroup, MenuItem, Select} from "@mui/material";
 
 const Header = styled.div`
   display: flex;
@@ -208,7 +208,13 @@ const ModalContainer = styled.div`
   overflow: auto;
   padding: 40px;
 `
-
+const Buttons = styled.div`
+  display: flex;
+  flex-flow: column;
+  button {
+    margin: 10px 0;
+  }
+`
 interface SelectedItems {[key: number]: {checked?: boolean}}
 
 const CalendarSidebar = () => {
@@ -222,6 +228,7 @@ const CalendarSidebar = () => {
     const [isVisibleModal, setIsVisibleModal] = useState(false)
     const [selectedItems, setSelectedItems] = useState<SelectedItems>({})
     const [selectedUser, setSelectedUser] = useState<number>()
+    const [selectedTicket, setSelectedTicket] = useState<number>()
     const calendarUsers = useSelector(calendarUserSelector)
     useEffect(() => {
         dispatch(fetchCalendarUser())
@@ -234,18 +241,16 @@ const CalendarSidebar = () => {
     }
 
     useEffect(() => {
-        if (currentMoney && Object.keys(currentMoney).length) {
+        if (currentMoney && Object.keys(currentMoney).length && selectedTicket) {
             const currentTicketsItems: ticketItem[] = []
-            currentMoney.tickets.map((item: tickets) => {
-                getMoneyItems(item.id).then((res) => {
-                    currentTicketsItems.push(...res.data.values)
-                    setCurrentMoneys(currentTicketsItems)
-                })
+            getMoneyItems(selectedTicket).then((res) => {
+                currentTicketsItems.push(...res.data.values)
+                setCurrentMoneys(currentTicketsItems)
             })
         } else {
             setCurrentMoneys([])
         }
-    }, [currentMoney])
+    }, [currentMoney, selectedTicket])
 
     return (
         <Sidebar>
@@ -288,13 +293,18 @@ const CalendarSidebar = () => {
                     <BodyHeader>Day №{focusedDay}</BodyHeader>
                     <BodyWrapper>
                     {currentMoney.tickets.map((item: tickets) => {
-                        return <MoneyItem onClick={() => setIsVisibleModal(true)}>
+                        return <MoneyItem onClick={() => {
+                            setIsVisibleModal(true)
+                            setSelectedTicket(item.id)
+                        }} key={item.id}>
                             <span>{item.market}</span>
                             <span>{Math.floor(item.summ / 100)}</span>
                         </MoneyItem>
                     })}
                     {currentMoney.purchases.map((item: moneyPurchase) => {
-                        return <MoneyItem onClick={() => setIsVisibleModal(true)}>
+                        return <MoneyItem onClick={() => {
+                            setIsVisibleModal(true)
+                        }} key={item.id}>
                             <span>{item.name || allCats.find((cat: CatItemI) => cat.id === item.categoryId)?.name}</span>
                             <span>{Math.floor(item.summ / 100)}</span>
                         </MoneyItem>
@@ -307,7 +317,15 @@ const CalendarSidebar = () => {
                     <ModalWrapper>
                     {currentMoneys.map(item => (
                         <Item key={item.id}>
-                            <Checkbox value={selectedItems[item.id]?.checked || false} onChange={(value) => setSelectedItems({...selectedItems, [item.id]: {checked: value}})}/>
+                            <Checkbox value={selectedItems[item.id]?.checked || false} onChange={(value) => {
+                                if (value) {
+                                    setSelectedItems({...selectedItems, [item.id]: {checked: value}})
+                                } else {
+                                    const newSelected = {...selectedItems}
+                                    delete newSelected[item.id]
+                                    setSelectedItems(newSelected)
+                                }
+                            }}/>
                             {/*<Markers>*/}
                             {/*    <MarkersTrue></MarkersTrue>*/}
                             {/*    <MarkersFalse></MarkersFalse>*/}
@@ -327,8 +345,8 @@ const CalendarSidebar = () => {
                     <ModalWrapper>
                         <Select
                             value={selectedUser}
-                            label="Age"
-                            onChange={(value) => console.log(value)}
+                            label="Name"
+                            onChange={(e) => setSelectedUser(parseInt(e.target.value+""))}
                         >
                             {calendarUsers.map((item: {id: number, name: string}) => {
                                 return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
@@ -339,7 +357,31 @@ const CalendarSidebar = () => {
                                 return selectedItems[item.id]?.checked
                             })
                             .reduce((acc, next) => acc += Math.floor(next.summ / 100), 0)}₽</Sum>
-
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                '& > *': {
+                                    m: 1,
+                                },
+                            }}
+                        >
+                            <Buttons>
+                                <Button variant="contained" onClick={() => selectedUser && setTicketItemsForUser({calendarUserId: selectedUser, id: Object.keys(selectedItems).map(item => parseInt(item))})}>Add Ticket Items For User</Button>
+                                <Button variant="outlined" onClick={() => {
+                                    const selectedIds = Object.keys(selectedItems).map(item => parseInt(item))
+                                    const reversedItems = currentMoneys.filter((item) => !(selectedIds.indexOf(item.id) + 1))
+                                    const reversedIds: SelectedItems = {}
+                                    reversedItems.forEach((item) => {
+                                        reversedIds[item.id] = {checked: true}
+                                    })
+                                    // @ts-ignore
+                                    setSelectedItems(reversedIds)
+                                }}>Reverse</Button>
+                                <Button variant="contained" color="error" onClick={() => selectedTicket && deleteTicket(selectedTicket)}>
+                                    DELETE
+                                </Button>
+                            </Buttons>
+                    </Box>
                     </ModalWrapper>
                 </ModalContainer>
             </Modal>

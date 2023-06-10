@@ -239,16 +239,17 @@ exports.deleteTicket = (req, res) => {
 };
 
 exports.setTicketItemsForUser = async (req, res) => {
-    const data = req.query
-    const {calendarUserId, id} = data
-    try {
-        const result = await db.query(
-            'UPDATE moneydb.ticketitems SET "calendarUserId" = $1 WHERE id = $2 RETURNING *',
-            [calendarUserId, id]
-        );
-        res.status(200).json(result.rows[0]);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal server error');
-    }
+    const {calendarUserId, id} = req.body
+
+        id.map((item) => {
+                db.query(
+                    'UPDATE moneydb.ticketitems SET "calendarUserId" = $1 WHERE id = $2',
+                    [calendarUserId, item]
+                ).then((result) => {
+                    res.status(200).json(result.rows[0]);
+                }).catch((err) => {
+                    console.error(err);
+                    res.status(500).send('Internal server error');
+                })
+        })
 }
