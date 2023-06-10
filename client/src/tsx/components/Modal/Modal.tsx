@@ -4,7 +4,8 @@ import styled from "styled-components";
 interface ModalI {
     // isOpen: boolean,
     children: ReactNode,
-    isOpenP?: boolean
+    isOpenP?: boolean,
+    onClose: () => void
 }
 
 const Bg = styled.div`
@@ -24,9 +25,10 @@ const ModalDiv = styled.div`
   left: 50%;
   transform: translateX(-50%);
   max-width: 1200px;
+  width: 100%;
   z-index: 1000;
 `
-const Modal = ({children, isOpenP}: ModalI) => {
+const Modal = ({children, isOpenP, onClose}: ModalI) => {
     const [isOpen,setIsOpen] = useState(isOpenP)
     useEffect(() => {
         setIsOpen(isOpenP)
@@ -38,7 +40,10 @@ const Modal = ({children, isOpenP}: ModalI) => {
                 <ModalDiv>
                     {children}
                 </ModalDiv>
-                <Bg onClick={() => setIsOpen(false)}></Bg>
+                <Bg onClick={() => {
+                    onClose()
+                    setIsOpen(false)
+                }}></Bg>
             </>
 
     )

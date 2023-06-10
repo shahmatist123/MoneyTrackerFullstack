@@ -196,6 +196,3 @@ exports.newPass = (req,res) =>{
         }
     })
 }
-exports.themeSetting = (req,res) =>{
-
-}

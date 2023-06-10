@@ -3,6 +3,7 @@ import moneySlice from "../tsx/pages/Calendar/moneySlice";
 import {useDispatch} from "react-redux";
 import themeSlice from "../tsx/pages/themeSlice";
 import categorySlice from "../tsx/pages/categorySlice";
+import CalendarUserSlice from "../tsx/pages/calendarUserSlice";
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>()
 
 const store = configureStore({
@@ -10,6 +11,7 @@ const store = configureStore({
         money: moneySlice.reducer,
         theme: themeSlice.reducer,
         category: categorySlice.reducer,
+        calendarUser: CalendarUserSlice.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

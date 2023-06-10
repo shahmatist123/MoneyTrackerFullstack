@@ -9,6 +9,7 @@ import Dashboard, {dashboardPath} from "../pages/Dashboard";
 import AddPurchases, {purchasesPath} from "../pages/AddPurchases";
 import AddTicket, {ticketPath} from "../pages/AddTicket";
 import Categories, {categoriesPath} from "../pages/Categories";
+import CalendarUser, {calendarUserPath} from "../pages/CalendarUser";
 
 const Content = styled.div`
   margin-top: 35px;
@@ -24,6 +25,7 @@ const MainRouter = () => {
                 <Route path={purchasesPath} element={<AddPurchases />}/>
                 <Route path={ticketPath} element={<AddTicket />}/>
                 <Route path={categoriesPath} element={<Categories />}/>
+                <Route path={calendarUserPath} element={<CalendarUser />}/>
             </Routes>
         </Content>
     )

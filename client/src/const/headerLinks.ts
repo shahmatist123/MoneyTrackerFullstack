@@ -3,6 +3,7 @@ import {purchasesPath} from "../tsx/pages/AddPurchases";
 import {ticketPath} from "../tsx/pages/AddTicket";
 import {categoriesPath} from "../tsx/pages/Categories";
 import {calendarPath} from "../tsx/pages/Calendar/Calendar";
+import {calendarUserPath} from "../tsx/pages/CalendarUser";
 
 const headerLinks = [{
     name: "Dashboard",
@@ -23,6 +24,10 @@ const headerLinks = [{
 }, {
     name: "Categories",
     url: categoriesPath,
+    isAuth: true
+}, {
+    name: "Calendar Users",
+    url: calendarUserPath,
     isAuth: true
 },]
 export default headerLinks;

@@ -14,6 +14,7 @@ import {getMoneyItems} from "../../api/MoneyApi/MoneyApi";
 import {moneyPurchase, ticketItem, tickets} from "../../types/moneyType";
 import {categorySelector, CatItemI} from "../../pages/categorySlice";
 import Modal from "../Modal/Modal";
+import Checkbox from "../Input/Checkbox";
 
 const Header = styled.div`
   display: flex;
@@ -104,14 +105,13 @@ const BodyHeader = styled.div`
 `
 
 const Sum = styled.div`
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
   flex: 0 0 auto;
   padding-bottom: 11px;
   padding-top: 11px;
   background: ${props => props.theme.bgLight};
-  position: sticky;
-  bottom: 0;
+  color: #ffffff;
   font-weight: 700;
 `
 
@@ -195,11 +195,19 @@ const BodyWrapper = styled.div`
   flex-wrap: wrap;
 `
 const ModalWrapper = styled.div`
-  padding-top: 40px;
-  max-height: 100%;
-  overflow: auto;
+
+  max-width: 600px;
 `
 
+const ModalContainer = styled.div`
+ display: flex;
+  justify-content: space-between;
+  max-height: 100%;
+  overflow: auto;
+  padding: 40px;
+`
+
+interface SelectedItems {[key: number]: {checked?: boolean}}
 
 const CalendarSidebar = () => {
     const dispatch = useAppDispatch()
@@ -210,6 +218,7 @@ const CalendarSidebar = () => {
     const focusedDay = useSelector(focusedDaySelector)
     const allCats = useSelector(categorySelector)
     const [isVisibleModal, setIsVisibleModal] = useState(false)
+    const [selectedItems, setSelectedItems] = useState<SelectedItems>({})
     const changeMonth = (month: number) => {
         dispatch(moneySlice.actions.changeMonth(month))
     }
@@ -286,27 +295,34 @@ const CalendarSidebar = () => {
                     </BodyWrapper>
                 </Body>
             }
-            <Modal isOpenP={isVisibleModal}>
-                <ModalWrapper>
-                {currentMoneys.map(item => (
-                    <Item key={item.id}>
-                        <Markers>
-                            <MarkersTrue></MarkersTrue>
-                            <MarkersFalse></MarkersFalse>
-                        </Markers>
-                        <ItemCounter>
-                            {item.quantity}
-                        </ItemCounter>
-                        <ItemInfo>
-                            {item.name}
-                        </ItemInfo>
-                        <ItemSum>
-                            {item.summ / 100}₽
-                        </ItemSum>
-                    </Item>))}
+            <Modal isOpenP={isVisibleModal} onClose={() => setIsVisibleModal(false)}>
+                <ModalContainer>
+                    <ModalWrapper>
+                    {currentMoneys.map(item => (
+                        <Item key={item.id}>
+                            <Checkbox value={selectedItems[item.id]?.checked || false} onChange={(value) => setSelectedItems({...selectedItems, [item.id]: {checked: value}})}/>
+                            {/*<Markers>*/}
+                            {/*    <MarkersTrue></MarkersTrue>*/}
+                            {/*    <MarkersFalse></MarkersFalse>*/}
+                            {/*</Markers>*/}
+                            <ItemCounter>
+                                {item.quantity}
+                            </ItemCounter>
+                            <ItemInfo>
+                                {item.name}
+                            </ItemInfo>
+                            <ItemSum>
+                                {item.summ / 100}₽
+                            </ItemSum>
+                        </Item>))}
 
-                <Sum>{currentMoneys.reduce((acc, next) => acc += Math.floor(next.summ / 100), 0)}₽</Sum>
-                </ModalWrapper>
+                    </ModalWrapper>
+                    <Sum>{currentMoneys
+                        .filter((item) => {
+                            return selectedItems[item.id]?.checked
+                        })
+                        .reduce((acc, next) => acc += Math.floor(next.summ / 100), 0)}₽</Sum>
+                </ModalContainer>
             </Modal>
         </Sidebar>)
 }

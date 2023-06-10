@@ -24,10 +24,12 @@ const themeRoutes = require('./routes/theme-router')
 themeRoutes(app)
 const categoryRoutes = require('./routes/category-router')
 categoryRoutes(app)
+const calendarUserRoutes = require('./routes/calendar-user-router')
+calendarUserRoutes(app)
 const statisticRoutes = require('./routes/statistic-router')
+// statisticRoutes(app)
 const axios = require("axios");
 const {addFileForTelegram} = require("./Controller/money-controller");
-// statisticRoutes(app)
 app.listen(port, () =>{
     console.log(`App listen on port: ${port}`)
 })
