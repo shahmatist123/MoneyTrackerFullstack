@@ -8,4 +8,5 @@ module.exports = (app) =>{
     app.route('/api/money/delete-ticket').delete(moneyController.deleteTicket)
     app.route('/api/money/delete-purchase').delete(moneyController.deletePurchase)
     app.route('/api/money/set-ticket-items-for-user').post(moneyController.setTicketItemsForUser)
+    app.route('/api/money/get-ticketitems-from-period').get(moneyController.getTicketItemsFromPeriod)
 }

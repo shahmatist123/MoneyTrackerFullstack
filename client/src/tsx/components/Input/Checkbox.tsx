@@ -16,6 +16,7 @@ const Span = styled.span`
   cursor: pointer;
 `
 const Label = styled.label`
+  position: relative;
   ${Input}:checked + ${Span}:after{
     content: "✓";
     font-size: 20px;

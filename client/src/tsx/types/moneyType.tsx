@@ -23,7 +23,13 @@ export interface ticketItem {
     quantity: number,
     ticketId: number,
     id: number,
-    userId: number
+    userId: number,
+    calendarUserId: number
+}
+
+export interface calendarUser {
+    name: string,
+    id: number,
 }
 
 export interface moneyItem {

@@ -253,3 +253,32 @@ exports.setTicketItemsForUser = async (req, res) => {
                 })
         })
 }
+exports.getTicketItemsFromPeriod = async (req, res) => {
+    try {
+        const { startYear, endYear, startMonth, endMonth, startDay, endDay, calendarUserId } = req.query;
+        const query =
+            'SELECT * FROM moneydb.tickets WHERE year >= $1 AND year <= $2 AND month >= $3 AND month <= $4 AND day >= $5 AND day <= $6';
+        const values = [startYear, endYear, startMonth, endMonth, startDay, endDay];
+        const tickets = await db.query(query, values);
+
+        // Retrieve ticket items for each ticket
+        const ticketItemsPromises = tickets.rows.map(async (ticket) => {
+            const ticketId = ticket.id;
+            if (calendarUserId != 0) {
+                const ticketItemsQuery = 'SELECT * FROM moneydb.ticketitems WHERE "ticketId" = $1 AND "calendarUserId" = $2';
+                const ticketItems = await db.query(ticketItemsQuery, [ticketId, calendarUserId]);
+                return { ...ticket, ticketItems: ticketItems.rows };
+            }
+            const ticketItemsQuery = 'SELECT * FROM moneydb.ticketitems WHERE "ticketId" = $1';
+            const ticketItems = await db.query(ticketItemsQuery, [ticketId]);
+            return { ...ticket, ticketItems: ticketItems.rows };
+        });
+
+        // Wait for all ticket items to be fetched
+        const ticketsWithItems = await Promise.all(ticketItemsPromises);
+        res.json(ticketsWithItems);
+    } catch (error) {
+        console.error('Error retrieving tickets:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

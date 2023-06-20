@@ -6,12 +6,12 @@ import moneySlice, {
     currentYearSelector,
     fetchMoneys,
     focusedDaySelector,
-    currentMoneySelector
+    currentMoneySelector, setMoneysUsers, fetchMoneyItems, ticketItemsSelector
 } from "../../pages/Calendar/moneySlice";
 import {useSelector} from "react-redux";
 import {useAppDispatch} from "../../../store/store";
-import {deleteTicket, getMoneyItems, setTicketItemsForUser} from "../../api/MoneyApi/MoneyApi";
-import {moneyPurchase, ticketItem, tickets} from "../../types/moneyType";
+import {deleteTicket, setTicketItemsForUser} from "../../api/MoneyApi/MoneyApi";
+import {calendarUser, moneyPurchase, ticketItem, tickets} from "../../types/moneyType";
 import {categorySelector, CatItemI} from "../../pages/categorySlice";
 import Modal from "../Modal/Modal";
 import Checkbox from "../Input/Checkbox";
@@ -137,6 +137,21 @@ const ItemInfo = styled.div`
   box-orient: vertical;
 `
 
+const ItemUser = styled.div`
+  font-size: 14px;
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  box-orient: vertical;
+  font-weight: 600;
+`
+
 const ItemSum = styled.div`
   font-size: 16px;
   font-weight: 700;
@@ -200,6 +215,13 @@ const ModalWrapper = styled.div`
 
   max-width: 600px;
 `
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  max-width: 600px;
+  color: #fff;
+  grid-gap: 10px;
+`
 
 const ModalContainer = styled.div`
  display: flex;
@@ -207,6 +229,7 @@ const ModalContainer = styled.div`
   max-height: 100%;
   overflow: auto;
   padding: 40px;
+  align-items: flex-start;
 `
 const Buttons = styled.div`
   display: flex;
@@ -219,7 +242,7 @@ interface SelectedItems {[key: number]: {checked?: boolean}}
 
 const CalendarSidebar = () => {
     const dispatch = useAppDispatch()
-    const [currentMoneys, setCurrentMoneys] = useState<ticketItem[]>([])
+    const ticketItems: ticketItem[] | undefined = useSelector(ticketItemsSelector)
     const currentYear = useSelector(currentYearSelector)
     const currentMonth = useSelector(currentMonthSelector)
     const currentMoney = useSelector(currentMoneySelector)
@@ -229,7 +252,7 @@ const CalendarSidebar = () => {
     const [selectedItems, setSelectedItems] = useState<SelectedItems>({})
     const [selectedUser, setSelectedUser] = useState<number>()
     const [selectedTicket, setSelectedTicket] = useState<number>()
-    const calendarUsers = useSelector(calendarUserSelector)
+    const calendarUsers: calendarUser[] = useSelector(calendarUserSelector)
     useEffect(() => {
         dispatch(fetchCalendarUser())
     }, [])
@@ -242,16 +265,9 @@ const CalendarSidebar = () => {
 
     useEffect(() => {
         if (currentMoney && Object.keys(currentMoney).length && selectedTicket) {
-            const currentTicketsItems: ticketItem[] = []
-            getMoneyItems(selectedTicket).then((res) => {
-                currentTicketsItems.push(...res.data.values)
-                setCurrentMoneys(currentTicketsItems)
-            })
-        } else {
-            setCurrentMoneys([])
+            dispatch(fetchMoneyItems({ticketId: selectedTicket}))
         }
     }, [currentMoney, selectedTicket])
-
     return (
         <Sidebar>
             <Header>
@@ -313,35 +329,38 @@ const CalendarSidebar = () => {
                 </Body>
             }
             <Modal isOpenP={isVisibleModal} onClose={() => setIsVisibleModal(false)}>
-                <ModalContainer>
-                    <ModalWrapper>
-                    {currentMoneys.map(item => (
-                        <Item key={item.id}>
-                            <Checkbox value={selectedItems[item.id]?.checked || false} onChange={(value) => {
-                                if (value) {
-                                    setSelectedItems({...selectedItems, [item.id]: {checked: value}})
-                                } else {
-                                    const newSelected = {...selectedItems}
-                                    delete newSelected[item.id]
-                                    setSelectedItems(newSelected)
-                                }
-                            }}/>
-                            {/*<Markers>*/}
-                            {/*    <MarkersTrue></MarkersTrue>*/}
-                            {/*    <MarkersFalse></MarkersFalse>*/}
-                            {/*</Markers>*/}
-                            <ItemCounter>
-                                {item.quantity}
-                            </ItemCounter>
-                            <ItemInfo>
-                                {item.name}
-                            </ItemInfo>
-                            <ItemSum>
-                                {item.summ / 100}₽
-                            </ItemSum>
-                        </Item>))}
+                {ticketItems && <ModalContainer>
+                    <Grid>
+                        {ticketItems.map(item => (
+                            <>
+                                <Checkbox value={selectedItems[item.id]?.checked || false} onChange={(value) => {
+                                    if (value) {
+                                        setSelectedItems({...selectedItems, [item.id]: {checked: value}})
+                                    } else {
+                                        const newSelected = {...selectedItems}
+                                        delete newSelected[item.id]
+                                        setSelectedItems(newSelected)
+                                    }
+                                }}/>
+                                {/*<Markers>*/}
+                                {/*    <MarkersTrue></MarkersTrue>*/}
+                                {/*    <MarkersFalse></MarkersFalse>*/}
+                                {/*</Markers>*/}
+                                <ItemCounter>
+                                    {item.quantity}
+                                </ItemCounter>
+                                <ItemInfo>
+                                    {item.name}
+                                </ItemInfo>
+                                <ItemSum>
+                                    {item.summ / 100}₽
+                                </ItemSum>
+                                <ItemUser>
+                                    {item.calendarUserId ? calendarUsers.find(user => user.id === item.calendarUserId)!.name : "Нет юзера"}
+                                </ItemUser>
+                            </>))}
 
-                    </ModalWrapper>
+                    </Grid>
                     <ModalWrapper>
                         <Select
                             value={selectedUser}
@@ -352,7 +371,7 @@ const CalendarSidebar = () => {
                                 return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                             })}
                         </Select>
-                        <Sum>{currentMoneys
+                        <Sum>{ticketItems
                             .filter((item) => {
                                 return selectedItems[item.id]?.checked
                             })
@@ -366,10 +385,14 @@ const CalendarSidebar = () => {
                             }}
                         >
                             <Buttons>
-                                <Button variant="contained" onClick={() => selectedUser && setTicketItemsForUser({calendarUserId: selectedUser, id: Object.keys(selectedItems).map(item => parseInt(item))})}>Add Ticket Items For User</Button>
+                                <Button variant="contained"
+                                        onClick={() => selectedUser && dispatch(setMoneysUsers({calendarUserId: selectedUser, id: Object.keys(selectedItems).map(item => parseInt(item))}))}
+                                >
+                                    Add Ticket Items For User
+                                </Button>
                                 <Button variant="outlined" onClick={() => {
                                     const selectedIds = Object.keys(selectedItems).map(item => parseInt(item))
-                                    const reversedItems = currentMoneys.filter((item) => !(selectedIds.indexOf(item.id) + 1))
+                                    const reversedItems = ticketItems.filter((item) => !(selectedIds.indexOf(item.id) + 1))
                                     const reversedIds: SelectedItems = {}
                                     reversedItems.forEach((item) => {
                                         reversedIds[item.id] = {checked: true}
@@ -381,9 +404,9 @@ const CalendarSidebar = () => {
                                     DELETE
                                 </Button>
                             </Buttons>
-                    </Box>
+                        </Box>
                     </ModalWrapper>
-                </ModalContainer>
+                </ModalContainer>}
             </Modal>
         </Sidebar>)
 }

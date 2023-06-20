@@ -32,3 +32,6 @@ export const setTicketItemsForUser = (data: {calendarUserId: number, id: number[
 export const deleteTicket = (id: number): Promise<any> => {
     return axios.delete(`${config.url}/api/money/delete-ticket?id=${id}`);
 }
+export const getTicketItemsFromPeriod = ({startYear, endYear, startMonth, endMonth, startDay, endDay, calendarUserId}: {[key:string]: number}): Promise<any> => {
+    return axios.get(`${config.url}/api/money/get-ticketitems-from-period?startYear=${startYear}&endYear=${endYear}&startMonth=${startMonth}&endMonth=${endMonth}&startDay=${startDay}&endDay=${endDay}&calendarUserId=${calendarUserId}`);
+}
