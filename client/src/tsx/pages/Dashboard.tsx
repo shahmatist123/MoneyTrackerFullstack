@@ -39,6 +39,7 @@ const Summ = styled.div`
 const Active = styled.div`
   background: rgb(41, 42, 47);
 `
+
 const Dashboard = () => {
     const dispatch = useAppDispatch()
     const dashboard = useSelector(dashboardSelector)
