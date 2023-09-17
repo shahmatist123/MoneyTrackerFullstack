@@ -86,8 +86,8 @@ exports.addFile = (req, res) => {
 }
 exports.addFileForTelegram = (req, res, ctx) => {
     const data = req.data
-    const resultObj = data
-    const date = new Date(resultObj.localDateTime)
+    const resultObj = data[0].ticket.document.receipt
+    const date = new Date(resultObj.dateTime)
     const month = date.getMonth()
     const year = date.getFullYear()
     const day = date.getDate()
