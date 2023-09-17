@@ -8,7 +8,6 @@ exports.getAllThemes = (req, res) => {
                       FROM moneydb.themes where
                       "userId" in (${userId}) or "isDefaultTheme" in (true);`, (error, result) => {
             if (error) {
-                console.log(error)
                 response.status(400, error, res)
             } else{
                 response.status(200, result.rows, res)

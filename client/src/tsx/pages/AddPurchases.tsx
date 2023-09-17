@@ -24,16 +24,12 @@ const AddPurchases = () => {
     const getValue = (name: string | undefined, value: string | number[] | number) => {
         if (name) valueForm[name] = value;
         setValueForm({...valueForm});
-        console.log(valueForm)
     }
 
     const onSubmit = () => {
         add({...valueForm}).then((r: any) => {
-            console.log(r)
         });
     }
-
-
     return (
         <>
             <FormWrapper>

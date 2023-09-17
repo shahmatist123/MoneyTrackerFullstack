@@ -77,7 +77,6 @@ const moneySlice = createSlice({
                     return newItem
                 })
             }
-            console.log()
         })
     },
 })

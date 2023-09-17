@@ -16,7 +16,6 @@ exports.add = (req, res) => {
     db.connect((err, client, done) => {
         client.query(addMoney, (error, result) => {
             if (error) {
-                console.log(error)
                 response.status(400, error, res)
             } else {
                 response.status(200, {message: 'Добавлено', data}, res)
@@ -47,7 +46,6 @@ exports.addFile = (req, res) => {
                 const market = resultObj.user
                 const summ = resultObj.totalSum
 
-                console.log(year, month, day, market, summ)
                 db.connect((err, client, done) => {
                     client.query(`INSERT INTO moneydb.tickets ("userId", year, month, day, market, summ)
                                   VALUES ('1', '${year}', '${month}', ${day}, '${market}', ${summ})
@@ -139,7 +137,6 @@ exports.getMoneyPerMouth = (req, res) => {
                       where userid in (${userId})
                         AND date LIKE '%${month}.${year}%';`, (error, result) => {
             if (error) {
-                console.log(error)
                 response.status(400, error, res)
             } else {
                 purchaseList = result.rows
@@ -149,7 +146,6 @@ exports.getMoneyPerMouth = (req, res) => {
                         AND month IN ('${month - 1}')
                         AND "userId" IN (${userId})`, (error, result) => {
                     if (error) {
-                        console.log(error)
                         response.status(400, error, res)
                     } else {
                         tickets = result.rows
@@ -177,7 +173,6 @@ exports.getTicketItems = (req, res) => {
                       where "ticketId" in (${ticketId})
                       and "userId" in (${userId});`, (error, result) => {
             if (error) {
-                console.log(error)
                 response.status(400, error, res)
             } else {
                 response.status(200, result.rows, res)
@@ -195,7 +190,6 @@ exports.setFavorite = (req, res) => {
                       where "ticketId" in (${ticketId})
                       and "userId" in (${userId});`, (error, result) => {
             if (error) {
-                console.log(error)
                 response.status(400, error, res)
             } else {
                 response.status(200, result.rows, res)

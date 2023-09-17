@@ -8,7 +8,8 @@ import {useAppDispatch} from "../../store/store";
 import {currentTheme, fetchTheme, themeSelector} from "../pages/themeSlice";
 import {useSelector} from "react-redux";
 import {fetchCategory} from "../pages/categorySlice";
-
+import { GoogleLogin } from '@react-oauth/google';
+import Login from "../components/Auth/Login";
 const StyledLayout = styled.div`
   display: flex;
   height: 100%;
@@ -26,10 +27,11 @@ const MainLayout = () => {
     return (
         <>
             <ThemeProvider theme={theme}>
-            <StyledLayout>
-                <SideMenu/>
-                <MainRouter/>
-            </StyledLayout>
+                <StyledLayout>
+                    <SideMenu/>
+                    <MainRouter/>
+                </StyledLayout>
+                <Login></Login>
             {/*<Footer/>*/}
             </ThemeProvider>
         </>

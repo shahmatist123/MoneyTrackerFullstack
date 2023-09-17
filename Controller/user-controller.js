@@ -48,7 +48,6 @@ exports.signup = (req, res) => {
 
             transporter.sendMail(message, (err, info) => {
                 if (err) {
-                    console.log('Error occurred. ' + err.message);
                     return process.exit(1);
                 }
             });
