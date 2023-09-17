@@ -99,7 +99,7 @@ exports.addFileForTelegram = (req, res, ctx) => {
                                   VALUES ('1', '${year}', '${month}', ${day}, '${market}', ${summ})
                                   RETURNING id;`, (error, result) => {
             if (error) {
-                ctx.reply('Сервер сдох')
+                ctx.reply('Сервер сдох' + JSON.stringify(error))
                 return
             }
             let ticketId = result.rows[0].id;
@@ -115,7 +115,7 @@ exports.addFileForTelegram = (req, res, ctx) => {
                     })
                 })
                 if (errorItems) {
-                    ctx.reply('Сервер сдох')
+                    ctx.reply('Сервер сдох' + JSON.stringify(errorItems))
                 } else {
                     ctx.reply('Минус бабки(я всё сохранил)')
                 }

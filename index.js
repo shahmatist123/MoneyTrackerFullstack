@@ -33,7 +33,6 @@ const {addFileForTelegram} = require("./Controller/money-controller");
 app.listen(port, () =>{
     console.log(`App listen on port: ${port}`)
 })
-if (process.env.NODE_ENV !== 'dev') {
     console.log(process.env.NODE_ENV)
     const token = config.get('TELEGRAM')
     const bot = new Telegraf(token) //сюда помещается токен, который дал botFather
@@ -47,8 +46,8 @@ if (process.env.NODE_ENV !== 'dev') {
             axios.get(`https://api.telegram.org/bot${token}/getFile?file_id=${document.file_id}`).then((req, res) => {
                 axios.get(`https://api.telegram.org/file/bot${token}/${req.data.result.file_path}`).then((req, res) => {
                     addFileForTelegram(req, res, ctx)
-                }).catch(() => {
-                    ctx.reply('Сервер сдох 1')
+                }).catch((error) => {
+                    ctx.reply('Сервер сдох 1', )
                 })
             }).catch(() => {
                 ctx.reply('Сервер сдох 2')
@@ -56,4 +55,3 @@ if (process.env.NODE_ENV !== 'dev') {
         }
     }) //bot.on это обработчик введенного юзером сообщения, в данном случае он отслеживает стикер, можно использовать обработчик текста или голосового сообщения
     bot.launch() // запуск бота
-}
