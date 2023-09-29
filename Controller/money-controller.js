@@ -5,6 +5,7 @@ const types = require("../helpers/types");
 const formidable = require("formidable");
 const fs = require("fs");
 const path = require("path");
+
 exports.add = (req, res) => {
     const data = req.body
     const fullDate = time.fullDateHelper()
