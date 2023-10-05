@@ -54,6 +54,11 @@ if (process.env.NODE_ENV !== 'dev') {
                 ctx.reply('Сервер сдох 2')
             })
         }
+        switch(message.text){
+            case '/addmoney':
+                console.log(message)
+                break;
+        }
     }) //bot.on это обработчик введенного юзером сообщения, в данном случае он отслеживает стикер, можно использовать обработчик текста или голосового сообщения
     bot.launch() // запуск бота
 }
