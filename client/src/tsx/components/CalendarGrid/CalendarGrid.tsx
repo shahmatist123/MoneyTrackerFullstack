@@ -48,6 +48,7 @@ const Market = styled.span`
 const MarketWrapper = styled.div`
   margin-top: 22px;
 `
+const currentDay = new Date().getDate();
 
 const CalendarGrid = () => {
     const dispatch = useAppDispatch()
@@ -154,7 +155,7 @@ const CalendarGrid = () => {
 
     const getCell = (i: number): JSX.Element => {
         return (
-            <Cell key={i} onClick={() => dispatch(moneySlice.actions.changeFocusedDay(i))}>
+            <Cell style={currentDay === i && {background: "#539C70"} || undefined} key={i} onClick={() => dispatch(moneySlice.actions.changeFocusedDay(i))}>
                 {getContent(i)}
             </Cell>
         )
