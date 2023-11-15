@@ -42,7 +42,7 @@ const Active = styled.div`
 `
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(4, auto);
 `
 const GridItem = styled.div`
   color: #fff;
@@ -115,7 +115,10 @@ const Dashboard = () => {
                     {ticketItem.name}
                 </GridItem>
                 <GridItem>
-                    {ticketItem.price / 100} ₽
+                    {ticketItem.quantity}
+                </GridItem>
+                <GridItem>
+                    {ticketItem.summ / 100} ₽
                 </GridItem>
                 <GridItem>
                     {calendarUsers.find((user: UserItemI) => user.id === ticketItem.calendarUserId)?.name}
