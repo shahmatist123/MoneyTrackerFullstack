@@ -283,3 +283,21 @@ exports.getTicketItemsFromPeriod = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+exports.updateTicketItems = async (req, res) => {
+    try {
+        const newTickets = req.body.newTickets;
+        newTickets.forEach(({id, summ, quantity, isAdd}) => {
+            client.query(`UPDATE moneydb.tickets SET summ = ${summ}, quantity = ${quantity} WHERE id = ${id};`, (error, result) => {
+                if (error) {
+                    res.status(500).json({ error: 'BD ERROR' });
+                    return
+                }
+                res.status(200).json(result.rows);
+            })
+        })
+        done()
+    } catch (error) {
+        console.error('Error retrieving tickets:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

@@ -201,11 +201,12 @@ const MarkersTrue = styled.div`
   cursor: pointer;
 `
 const MoneyItem = styled.div`
-  display: flex;flex-flow: column;
-  gap: 25px;
+  display: flex;
   align-items: center;
-  flex: 0 0 45%;
+  justify-content: space-between;
   cursor: pointer;
+  margin-bottom: 40px;
+  width: 100%;
 `
 const BodyWrapper = styled.div`
   display: flex;
@@ -328,7 +329,10 @@ const CalendarSidebar = () => {
                     </BodyWrapper>
                 </Body>
             }
-            <Modal isOpenP={isVisibleModal} onClose={() => setIsVisibleModal(false)}>
+            <Modal isOpenP={isVisibleModal} onClose={() => {
+                setIsVisibleModal(false)
+                setSelectedItems({})
+            }}>
                 {ticketItems && <ModalContainer>
                     <Grid>
                         {ticketItems.map(item => (

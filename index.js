@@ -2,7 +2,7 @@ const config = require('config');
 const express = require('express')
 const { Telegraf } = require('telegraf')
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 4000
 const cors = require('cors')
 const bodyParser = require('body-parser')
 // const passport = require('passport')
@@ -30,7 +30,7 @@ const statisticRoutes = require('./routes/statistic-router')
 // statisticRoutes(app)
 const axios = require("axios");
 const {addFileForTelegram} = require("./Controller/money-controller");
-app.listen(port, () =>{
+app.listen(port,(asd) =>{
     console.log(`App listen on port: ${port}`)
 })
 if (process.env.NODE_ENV !== 'dev') {

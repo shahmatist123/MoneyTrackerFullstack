@@ -10,7 +10,7 @@ interface initialStateI {
     startDay: number,
     endDay: number,
     calendarUserId: number,
-    ticketItems?: ticketItem[]
+    tickets?: ticketItem[]
 }
 
 const initialState: initialStateI = {
@@ -21,7 +21,7 @@ const initialState: initialStateI = {
     startDay: 0,
     endDay: 0,
     calendarUserId: 0,
-    ticketItems: undefined
+    tickets: undefined
 }
 
 export const fetchTicketItemsPeriod = createAsyncThunk(
@@ -64,7 +64,7 @@ const dashboardSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchTicketItemsPeriod.fulfilled, (state, action) => {
-            state.ticketItems = action.payload
+            state.tickets = action.payload
         })
     },
 })
